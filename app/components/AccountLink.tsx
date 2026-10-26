@@ -20,12 +20,9 @@ export default function AccountLink() {
         setCredits(null);
         return;
       }
-      const { data } = await supabase
-        .from("profiles")
-        .select("generation_credits")
-        .eq("id", userId)
-        .maybeSingle();
-      if (active) setCredits(data?.generation_credits ?? 0);
+      const response = await fetch("/api/account/credits", { cache: "no-store" });
+      const data = await response.json() as { credits?: number };
+      if (active) setCredits(data.credits ?? 0);
     }
 
     void supabase.auth.getUser().then(({ data }) => refresh(data.user?.id ?? null, data.user?.email ?? null));

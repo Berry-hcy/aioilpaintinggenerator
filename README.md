@@ -17,7 +17,7 @@ npm run dev
 
 Open <http://localhost:3000>. Use a JPG, PNG, or WebP image up to 4 MB. Sign in with Google to receive one free painting credit. Each successful painting uses one credit; failed generations return the credit. The generator also allows up to three attempts per IP per ten minutes.
 
-## Set up Google sign-in and free credits
+## Set up Google sign-in and credits
 
 1. Create a Supabase project at <https://supabase.com/>.
 2. In Supabase **SQL Editor**, open a new query, paste in `supabase/migrations/202610260001_credit_accounts.sql`, and click **Run**. This creates the account-credit table and the safe functions the site uses to subtract or return credits.
@@ -26,8 +26,22 @@ Open <http://localhost:3000>. Use a JPG, PNG, or WebP image up to 4 MB. Sign in 
 5. In Supabase **Authentication → Providers → Google**, turn on Google sign-in and paste in the OAuth client ID and secret from Google. Save the changes.
 6. In Supabase **Authentication → URL Configuration**, set Site URL to `https://aioilpaintinggenerator.store`. Add `http://localhost:3000/**` and `https://aioilpaintinggenerator.store/**` to Redirect URLs.
 7. In Vercel **Project → Settings → Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for Production (and Preview if desired). Set `SITE_URL` to `https://aioilpaintinggenerator.store`, then redeploy.
+8. In Supabase SQL Editor, run `supabase/migrations/202610260002_waffo_credit_packs.sql` after the first migration. This adds expiring paid-credit lots and the order ledger.
 
-Until the Supabase and Google settings are complete, sign-in and generation will not work. Paid credit packages and checkout are not connected yet; they depend on the Waffo account type and package prices.
+## Set up Waffo one-time credit packs
+
+Create and publish two **one-time USD products** in the Waffo dashboard:
+
+- Starter Pack: $4.99
+- Value Pack: $14.99
+
+Copy the two product IDs shown by Waffo. In Vercel **Project → Settings → Environment Variables**, set `WAFFO_MERCHANT_ID`, `WAFFO_STORE_ID`, `WAFFO_PRIVATE_KEY`, `WAFFO_PRODUCT_ID_STARTER`, and `WAFFO_PRODUCT_ID_VALUE` for Production. The private key is a secret: enter it only in the Vercel value box and never commit it or send it in chat. Set `WAFFO_MERCHANT_ID` to your merchant ID and `WAFFO_STORE_ID` to the store used by those products.
+
+The merchant, store, and product IDs provided for this site are already wired into the server-side catalog. In Vercel, add `WAFFO_PRIVATE_KEY` using the production API private key. Keep it secret; do not commit it or send it in chat.
+
+In Waffo, add a production webhook pointing to `https://aioilpaintinggenerator.store/api/waffo/webhook` and subscribe to `order.completed` and `refund.succeeded`. The webhook handler verifies Waffo's production signature, store, currency, amount, signed pack metadata, and authenticated buyer before granting credits. Do not grant credits from a browser redirect. Redeploy after adding the Vercel variable.
+
+Paid credits are added only after a verified payment event. Each paid credit creates an HD generation and expires 12 months after purchase. Free and legacy credits create standard-definition generations. When both types are available, paid credits closest to expiration are used first.
 
 ## Settings needed for a live deployment
 
@@ -40,6 +54,7 @@ Add these environment variables in Vercel:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
+- `WAFFO_PRIVATE_KEY`
 
 The OpenAI, Upstash, and Supabase service-role values are secrets. Never commit them to GitHub or expose them in browser code. The `NEXT_PUBLIC_` Supabase values are designed to be public; access is controlled by the database's row rules.
 
@@ -49,6 +64,9 @@ The OpenAI, Upstash, and Supabase service-role values are secrets. Never commit 
 - `/privacy` — privacy notice
 - `/login` — Google sign-in
 - `/account` — available painting credits and sign-out
+- `/payment/success` — payment confirmation status
+- `/api/checkout` — authenticated Waffo checkout session
+- `/api/waffo/webhook` — signed payment notifications
 - `/sitemap.xml` — sitemap, built from `SITE_URL`
 - `/robots.txt` — crawl rules and sitemap address
 - `/api/generate` — server endpoint for image edits

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
 import AccountLink from "@/app/components/AccountLink";
 import SiteFooter from "@/app/components/SiteFooter";
+import CreditPacks from "@/app/components/CreditPacks";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -159,7 +160,8 @@ export default function Home() {
       <section className="pricing-section" id="pricing" aria-labelledby="pricing-heading">
         <p className="eyebrow">PRICING AND CREDITS</p>
         <h2 id="pricing-heading">Start with one free painting.</h2>
-        <p>Sign in with Google and a new account gets one free generation credit. Each successful painting uses one credit; if generation fails, the credit is normally returned automatically. Paid credit packs and checkout are not available yet. If they launch, we will show the price and number of generations before you buy.</p>
+        <p className="pricing-intro">Sign in with Google to get one free credit. Choose a one-time credit pack when you want to create more.</p>
+        <CreditPacks />
       </section>
 
       <section id="how-it-works" className="how-section">
@@ -174,7 +176,7 @@ export default function Home() {
       <section className="faq-section">
         <div className="section-heading"><span>A FEW THINGS TO KNOW</span><h2>Good to know</h2></div>
         <div className="faq-list">
-          <details><summary>How much does it cost?</summary><p>A new account gets one free generation credit after signing in with Google. Each successful painting uses one credit, and failed generations are normally refunded. Paid credit packs and checkout are not available yet. We will show any future prices before purchase.</p></details>
+          <details><summary>How much does it cost?</summary><p>New accounts get one free standard-definition painting. The Starter Pack is $4.99 for 10 HD credits, and the Value Pack is $14.99 for 40 HD credits. Paid credits are one-time purchases and expire 12 months after purchase. Failed generations are normally refunded.</p></details>
           <details><summary>What photos can I upload?</summary><p>Use a JPG, PNG, or WebP file up to 4 MB. Please only upload photos you have permission to use.</p></details>
           <details><summary>Do I need an account?</summary><p>Yes. Sign in with Google to use your free painting credit and see how many credits remain.</p></details>
           <details><summary>What happens to my photo?</summary><p>Your photo is sent to our image service so it can create the painting. This website does not save uploads to a gallery. See our <a href="/privacy">Privacy Notice</a> for more details.</p></details>

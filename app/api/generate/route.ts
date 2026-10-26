@@ -70,16 +70,19 @@ export async function POST(request: Request) {
     return jsonError("The account service is not set up yet. Please try again later.", 503);
   }
 
-  const { data: consumed, error: consumeError } = await admin.rpc("consume_generation_credit", { p_user_id: userId });
+  const { data: consumedRows, error: consumeError } = await admin.rpc("consume_generation_credit", { p_user_id: userId });
   if (consumeError) {
     console.error("Could not use generation credit", consumeError);
     return jsonError("We couldn’t check your painting credits. Please try again shortly.", 503);
   }
-  if (!consumed) return Response.json({ error: "You’re out of painting credits. More purchase options will be available soon.", code: "NO_CREDITS" }, { status: 402 });
+  const consumed = Array.isArray(consumedRows) ? consumedRows[0] as { credit_lot_id: string; quality: string } | undefined : undefined;
+  if (!consumed) return Response.json({ error: "You’re out of painting credits. Choose a pack below to get more.", code: "NO_CREDITS" }, { status: 402 });
+  const creditLotId = consumed.credit_lot_id;
+  const creditQuality = consumed.quality;
 
   async function refundCredit() {
     try {
-      const { error } = await admin.rpc("refund_generation_credit", { p_user_id: userId });
+      const { error } = await admin.rpc("refund_generation_credit", { p_user_id: userId, p_credit_lot_id: creditLotId });
       if (error) console.error("Could not refund generation credit", error);
     } catch (error) {
       console.error("Could not refund generation credit", error);
@@ -93,7 +96,7 @@ export async function POST(request: Request) {
       model: "gpt-image-2.5-sunburst",
       image: inputFile,
       prompt: "Transform the uploaded photo into a beautiful traditional oil painting. Preserve the main subject, recognizable features, pose, and composition. Use visible layered brushstrokes, rich but natural pigments, subtle canvas texture, and painterly light. Make it feel like a carefully hand-painted fine-art oil portrait. Do not add text, borders, or new subjects.",
-      quality: "medium",
+      quality: creditQuality === "hd" ? "high" : "medium",
       size: "auto",
       output_format: "jpeg",
       output_compression: 70,
