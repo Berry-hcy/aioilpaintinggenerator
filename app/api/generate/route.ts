@@ -20,6 +20,7 @@ export async function POST(request: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return Response.json({ error: "Please sign in with Google before creating a painting.", code: "AUTH_REQUIRED" }, { status: 401 });
+  const userId = user.id;
 
   const apiKey = process.env.OPENAI_API_KEY;
   const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
@@ -69,7 +70,7 @@ export async function POST(request: Request) {
     return jsonError("The account service is not set up yet. Please try again later.", 503);
   }
 
-  const { data: consumed, error: consumeError } = await admin.rpc("consume_generation_credit", { p_user_id: user.id });
+  const { data: consumed, error: consumeError } = await admin.rpc("consume_generation_credit", { p_user_id: userId });
   if (consumeError) {
     console.error("Could not use generation credit", consumeError);
     return jsonError("We couldn’t check your painting credits. Please try again shortly.", 503);
@@ -78,7 +79,7 @@ export async function POST(request: Request) {
 
   async function refundCredit() {
     try {
-      const { error } = await admin.rpc("refund_generation_credit", { p_user_id: user.id });
+      const { error } = await admin.rpc("refund_generation_credit", { p_user_id: userId });
       if (error) console.error("Could not refund generation credit", error);
     } catch (error) {
       console.error("Could not refund generation credit", error);

@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const instant = false;
+
 export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const params = await searchParams;
   const hasError = params.error === "google" || params.error === "callback";
