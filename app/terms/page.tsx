@@ -26,14 +26,30 @@ export default function TermsPage() {
         <p>You need to sign in with Google to generate a painting. A new account currently receives one free generation credit. Each successful image generation uses one credit. If generation fails, the credit is normally returned automatically; if it is not, contact us and we will review the issue. Keep your sign-in account secure and tell us if you believe it has been used without your permission.</p>
 
         <h2>Photos you upload</h2>
-        <p>You may upload a JPG, PNG, or WebP image up to 4 MB. You must have the rights and permission needed to upload the image and request its processing. Do not upload content that is illegal, abusive, non-consensual, violates another person’s privacy or rights, or contains sexual exploitation of minors. Do not use Canvasly to break the law or interfere with the service.</p>
+        <p>You may upload a JPG, PNG, or WebP image up to 4 MB. You must have the rights and permission needed to upload the image and request its processing. Do not use Canvasly to break the law or interfere with the service.</p>
         <p>You keep whatever rights you already have in your photo. You allow Canvasly and its service providers to process it only as needed to create and return the painting you request. The photo is sent to OpenAI’s image API; read our <Link href="/privacy">Privacy Policy</Link> for details about provider processing.</p>
+
+        <h2>Prohibited content</h2>
+        <p>You may not upload, request, or share content through Canvasly that falls into any of these six categories:</p>
+        <ol className="prohibited-list">
+          <li><strong>Pornography or sexually explicit content:</strong> explicit sexual acts, pornographic imagery, or nudity presented for sexual gratification.</li>
+          <li><strong>Sexual content involving minors:</strong> child sexual abuse or exploitation material, grooming, or any attempt to sexualize a person under 18, whether real or AI-generated.</li>
+          <li><strong>Graphic violence or gore:</strong> graphic injury, torture, or gore, or content that praises, encourages, or instructs violence or self-harm.</li>
+          <li><strong>Hate or targeted abuse:</strong> hateful, dehumanizing, threatening, or harassing content directed at a person or group based on protected characteristics.</li>
+          <li><strong>Non-consensual intimate or identity misuse:</strong> intimate imagery shared without consent, or a real person’s likeness used without permission to sexualize, deceive, threaten, or harass them.</li>
+          <li><strong>Copyright or trademark infringement:</strong> using protected artwork, characters, logos, or other copyrighted or trademarked material without the permission required to do so.</li>
+        </ol>
+        <p>You must also have permission to use a person’s photo or likeness. Do not try to bypass safety checks or disguise a prohibited request.</p>
+
+        <h2>Safety checks, reports, and enforcement</h2>
+        <p>Generation requests are subject to automated safety checks provided by our image-generation service. The service may reject a request or result. Automated checks are not perfect, and Canvasly does not manually pre-approve every image. Canvasly does not host a public gallery or keep generated images for ongoing review.</p>
+        <p>If you believe a request or result violates these terms, report it to <a href={`mailto:${CONTACT_EMAIL}?subject=Canvasly%20content%20report`}>{CONTACT_EMAIL}</a> with the account email (if applicable), approximate date and time, and a description of the concern. Please do not email illegal material or sensitive images. The site operator reviews reports and may limit or suspend accounts, block further generations, and take other steps required by law.</p>
 
         <h2>Generated paintings</h2>
         <p>AI results can vary and may not match the original photo or your expectations. We do not promise that a result will be accurate, unique, suitable for a particular purpose, or free of third-party rights concerns. You are responsible for reviewing a result and deciding how to use it. Any rights in generated results depend on applicable law and the terms of the services used to create them.</p>
 
         <h2>Credits, purchases, and refunds</h2>
-        <p>At present, Canvasly offers a free account credit and does not provide paid credit packages or checkout. If paid packages are added, we will show the price, credit amount, and purchase and refund terms before you pay. Nothing here removes any refund or consumer rights that cannot legally be waived. If you are charged but do not receive the credits or service, contact us so we can investigate.</p>
+        <p>A new account currently receives one free generation credit. One credit is used for each successful painting; failed generations are normally refunded automatically. Canvasly does not currently offer paid credit packages or checkout. If paid packages are added, we will show the price, number of generations, and purchase and refund terms before you pay. Nothing here removes any refund or consumer rights that cannot legally be waived. If you are charged but do not receive the credits or service, contact us so we can investigate.</p>
 
         <h2>Availability and changes</h2>
         <p>We work to keep Canvasly available, but we may pause or change features for maintenance, safety, or service-provider reasons. We may suspend access for misuse or a serious breach of these terms. We may update these terms as the service changes; the date above shows the latest revision. Continued use after an update means you accept the revised terms where applicable law permits.</p>

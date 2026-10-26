@@ -156,6 +156,12 @@ export default function Home() {
         <p className="privacy-note">By creating a painting, your photo is sent to our image service for processing. We don’t save it to a gallery. <Link href="/privacy">Learn about privacy</Link>.</p>
       </section>
 
+      <section className="pricing-section" id="pricing" aria-labelledby="pricing-heading">
+        <p className="eyebrow">PRICING AND CREDITS</p>
+        <h2 id="pricing-heading">Start with one free painting.</h2>
+        <p>Sign in with Google and a new account gets one free generation credit. Each successful painting uses one credit; if generation fails, the credit is normally returned automatically. Paid credit packs and checkout are not available yet. If they launch, we will show the price and number of generations before you buy.</p>
+      </section>
+
       <section id="how-it-works" className="how-section">
         <div className="section-heading"><span>THE SIMPLE WAY TO MAKE SOMETHING BEAUTIFUL</span><h2>Three steps. A whole new feeling.</h2></div>
         <div className="steps">
@@ -168,7 +174,7 @@ export default function Home() {
       <section className="faq-section">
         <div className="section-heading"><span>A FEW THINGS TO KNOW</span><h2>Good to know</h2></div>
         <div className="faq-list">
-          <details><summary>Do I get a free painting?</summary><p>Yes. Sign in with Google and your new account gets one painting credit to try the generator. Each successful painting uses one credit.</p></details>
+          <details><summary>How much does it cost?</summary><p>A new account gets one free generation credit after signing in with Google. Each successful painting uses one credit, and failed generations are normally refunded. Paid credit packs and checkout are not available yet. We will show any future prices before purchase.</p></details>
           <details><summary>What photos can I upload?</summary><p>Use a JPG, PNG, or WebP file up to 4 MB. Please only upload photos you have permission to use.</p></details>
           <details><summary>Do I need an account?</summary><p>Yes. Sign in with Google to use your free painting credit and see how many credits remain.</p></details>
           <details><summary>What happens to my photo?</summary><p>Your photo is sent to our image service so it can create the painting. This website does not save uploads to a gallery. See our <a href="/privacy">Privacy Notice</a> for more details.</p></details>
