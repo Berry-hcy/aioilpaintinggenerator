@@ -9,7 +9,7 @@ npm install
 cp .env.example .env.local
 ```
 
-Fill in the OpenAI, Upstash, and Supabase values in `.env.local`. Keep that file private; it is ignored by Git.
+Fill in the Cloudflare, Upstash, and Supabase values in `.env.local`. Keep that file private; it is ignored by Git.
 
 ```bash
 npm run dev
@@ -27,6 +27,15 @@ Open <http://localhost:3000>. Use a JPG, PNG, or WebP image up to 4 MB. Sign in 
 6. In Supabase **Authentication → URL Configuration**, set Site URL to `https://aioilpaintinggenerator.store`. Add `http://localhost:3000/**` and `https://aioilpaintinggenerator.store/**` to Redirect URLs.
 7. In Vercel **Project → Settings → Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for Production (and Preview if desired). Set `SITE_URL` to `https://aioilpaintinggenerator.store`, then redeploy.
 8. In Supabase SQL Editor, run `supabase/migrations/202610260002_waffo_credit_packs.sql` after the first migration. This adds expiring paid-credit lots and the order ledger.
+
+## Set up image generation with Cloudflare Workers AI
+
+1. In the Cloudflare dashboard, open **Workers AI** and find the account ID shown for your account.
+2. Open **Manage Account → API Tokens** and create a token with the **Workers AI** permissions needed to run models. Keep it private; never put it in browser code or send it in chat.
+3. Add `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` to `.env.local` for local development and to Vercel **Project → Settings → Environment Variables** for Production.
+4. Redeploy the Vercel project after adding or changing the values.
+
+The site uses Cloudflare model `@cf/black-forest-labs/flux-2-klein-4b` to turn the uploaded photo into an oil-painting style image. The model's free usage is limited by Cloudflare's daily quota; it is not unlimited, and generation can stop when the quota is exhausted. Check Cloudflare's current Workers AI pricing and limits before launch. The input photo is resized in your browser to meet the model's reference-image size limit before it is sent for processing.
 
 ## Set up Waffo one-time credit packs
 
@@ -47,7 +56,8 @@ Paid credits are added only after a verified payment event. Each paid credit cre
 
 Add these environment variables in Vercel:
 
-- `OPENAI_API_KEY`
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_API_TOKEN`
 - `UPSTASH_REDIS_REST_URL`
 - `UPSTASH_REDIS_REST_TOKEN`
 - `SITE_URL=https://aioilpaintinggenerator.store`
@@ -56,7 +66,7 @@ Add these environment variables in Vercel:
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `WAFFO_PRIVATE_KEY`
 
-The OpenAI, Upstash, and Supabase service-role values are secrets. Never commit them to GitHub or expose them in browser code. The `NEXT_PUBLIC_` Supabase values are designed to be public; access is controlled by the database's row rules.
+The Cloudflare API token, Upstash values, and Supabase service-role value are secrets. Never commit them to GitHub or expose them in browser code. The `NEXT_PUBLIC_` Supabase values are designed to be public; access is controlled by the database's row rules.
 
 ## Routes
 

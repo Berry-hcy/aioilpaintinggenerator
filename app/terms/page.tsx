@@ -27,7 +27,7 @@ export default function TermsPage() {
 
         <h2>Photos you upload</h2>
         <p>You may upload a JPG, PNG, or WebP image up to 4 MB. You must have the rights and permission needed to upload the image and request its processing. Do not use Canvasly to break the law or interfere with the service.</p>
-        <p>You keep whatever rights you already have in your photo. You allow Canvasly and its service providers to process it only as needed to create and return the painting you request. The photo is sent to OpenAI’s image API; read our <Link href="/privacy">Privacy Policy</Link> for details about provider processing.</p>
+        <p>You keep whatever rights you already have in your photo. You allow Canvasly and its service providers to process it only as needed to create and return the painting you request. The photo is sent to Cloudflare Workers AI for generation; read our <Link href="/privacy">Privacy Policy</Link> for details about provider processing.</p>
 
         <h2>Prohibited content</h2>
         <p>You may not upload, request, or share content through Canvasly that falls into any of these six categories:</p>

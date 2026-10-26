@@ -10,6 +10,25 @@ import CreditPacks from "@/app/components/CreditPacks";
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
+async function prepareReferencePhoto(file: File): Promise<File> {
+  const bitmap = await createImageBitmap(file);
+  try {
+    const scale = Math.min(1, 511 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("Your browser could not prepare this photo. Please try another image.");
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((value) => value ? resolve(value) : reject(new Error("Your browser could not prepare this photo. Please try again.")), "image/jpeg", 0.9);
+    });
+    return new File([blob], "photo.jpg", { type: "image/jpeg" });
+  } finally {
+    bitmap.close();
+  }
+}
+
 export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -63,7 +82,7 @@ export default function Home() {
     setResult("");
     try {
       const form = new FormData();
-      form.append("image", file);
+      form.append("image", await prepareReferencePhoto(file));
       const response = await fetch("/api/generate", { method: "POST", body: form });
       const data = (await response.json()) as { image?: string; error?: string };
       if (!response.ok || !data.image) {
@@ -145,7 +164,7 @@ export default function Home() {
         <div className="action-row">
           {result ? (
             <>
-              <a className="button button-primary" href={result} download="my-oil-painting.jpg">Download painting <span aria-hidden="true">↓</span></a>
+              <a className="button button-primary" href={result} download="my-oil-painting.png">Download painting <span aria-hidden="true">↓</span></a>
               <button className="button button-secondary" type="button" onClick={reset}>Try another photo</button>
             </>
           ) : (
