@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { WaffoPancakeError } from "@waffo/pancake-ts";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { CREDIT_PACKS, isCreditPackId, WAFFO_MERCHANT_ID } from "@/lib/waffo/catalog";
@@ -63,7 +64,29 @@ export async function POST(request: Request) {
     return Response.json({ checkoutUrl: checkout.checkoutUrl });
   } catch (error) {
     await admin.from("waffo_orders").update({ status: "failed" }).eq("external_id", externalId);
-    console.error("Waffo checkout session could not be created", error);
+    if (error instanceof WaffoPancakeError) {
+      console.error("Waffo checkout session could not be created", { status: error.status, errors: error.errors });
+      if (error.status === 401) {
+        return Response.json({ error: "Waffo rejected the production API key. Check that the production private key matches this merchant." }, { status: 502 });
+      }
+      if (error.status === 403) {
+        return Response.json({ error: "Waffo has not enabled production checkout for this merchant or product. Check production approval and product access in Waffo." }, { status: 502 });
+      }
+      if (error.status === 404) {
+        return Response.json({ error: "Waffo could not find this product in production. Check that the product ID is published in the production store." }, { status: 502 });
+      }
+      if (error.status === 400) {
+        return Response.json({ error: "Waffo rejected the checkout details. Check that this is an active, published one-time USD product in the production store." }, { status: 502 });
+      }
+      if (error.status === 429) {
+        return Response.json({ error: "Waffo is receiving too many requests. Please wait a moment and try again." }, { status: 502 });
+      }
+    } else {
+      console.error("Waffo checkout session could not be created", error instanceof Error ? error.name : "Unknown error");
+      if (error instanceof Error && /private key/i.test(error.message)) {
+        return Response.json({ error: "The Waffo private key could not be read. Check that Vercel contains the complete production key, including its BEGIN and END lines." }, { status: 502 });
+      }
+    }
     return Response.json({ error: "We could not open checkout. Please try again in a moment." }, { status: 502 });
   }
 }
