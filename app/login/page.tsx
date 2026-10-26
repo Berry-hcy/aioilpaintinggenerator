@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Sign in | Canvasly",
+  robots: { index: false, follow: true },
+};
 
 export const instant = false;
 

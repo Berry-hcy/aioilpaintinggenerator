@@ -8,13 +8,13 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: "Canvasly",
-  title: "AI Oil Painting Generator | Turn Photos into Oil Paintings",
-  description: "Turn a photo into an oil painting with Canvasly’s AI oil painting generator. Upload a JPG, PNG, or WebP image, create your artwork, and download it.",
+  title: "AI Oil Painting Generator | Turn a Photo into Art – Canvasly",
+  description: "Turn a photo into an oil painting with Canvasly’s AI generator. Get one free credit after Google sign-in, then preview and download your artwork.",
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {
     title: "AI Oil Painting Generator | Canvasly",
-    description: "Turn your photo into an oil painting with AI. Upload a JPG, PNG, or WebP image and download your artwork.",
+    description: "Turn a photo into an oil painting with AI. Get one free credit after Google sign-in, then preview and download your artwork.",
     type: "website",
     siteName: "Canvasly",
     url: "/",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "AI Oil Painting Generator | Canvasly",
-    description: "Turn your photo into an oil painting with AI.",
+    description: "Turn a photo into an oil painting with AI. Get one free credit after Google sign-in.",
   },
 };
 

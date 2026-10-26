@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const instant = false;
+export const metadata: Metadata = {
+  title: "Your Account | Canvasly",
+  robots: { index: false, follow: false },
+};
 
 export default async function AccountPage() {
   const supabase = await createClient();

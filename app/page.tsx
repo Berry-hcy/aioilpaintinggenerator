@@ -120,7 +120,7 @@ export default function Home() {
       <section className="hero">
         <div className="eyebrow"><span /> YOUR PHOTO, REIMAGINED</div>
         <h1>AI Oil Painting<br /><em>Generator</em></h1>
-        <p className="hero-copy">Turn a photo into an oil painting with AI.<br className="desktop-break" /> Upload a JPG, PNG, or WebP image and download your artwork.</p>
+        <p className="hero-copy">Turn a photo into an oil painting with AI.<br className="desktop-break" /> Get one free credit after Google sign-in, then preview and download your artwork.</p>
       </section>
 
       <section className="workspace" aria-label="Oil painting generator">
@@ -186,9 +186,19 @@ export default function Home() {
       <section id="how-it-works" className="how-section">
         <div className="section-heading"><span>THE SIMPLE WAY TO MAKE SOMETHING BEAUTIFUL</span><h2>Three steps. A whole new feeling.</h2></div>
         <div className="steps">
-          <article className="step"><div className="step-number">01</div><div className="step-symbol">▧</div><h3>Choose a photo</h3><p>Pick a favorite moment from your device. Portraits, pets, and places all work.</p></article>
-          <article className="step"><div className="step-number">02</div><div className="step-symbol">✳</div><h3>Let AI paint</h3><p>Our image tool reimagines your photo with the texture and warmth of oil paint.</p></article>
-          <article className="step"><div className="step-number">03</div><div className="step-symbol">↓</div><h3>Take it with you</h3><p>Preview your new painting and download it to keep.</p></article>
+          <article className="step"><div className="step-number">01</div><div className="step-symbol">▧</div><h3>Choose a photo</h3><p>Upload a JPG, PNG, or WebP image up to 4 MB. Portraits, pets, and landscapes are welcome.</p></article>
+          <article className="step"><div className="step-number">02</div><div className="step-symbol">✳</div><h3>Make an oil painting</h3><p>AI uses your photo as a reference and adds painterly brush texture while aiming to keep the main subject and composition.</p></article>
+          <article className="step"><div className="step-number">03</div><div className="step-symbol">↓</div><h3>Preview and download</h3><p>Review your result, download the PNG, or try another photo to create a different painting.</p></article>
+        </div>
+      </section>
+
+      <section className="photo-guide" aria-labelledby="photo-guide-heading">
+        <div className="section-heading"><span>PHOTO TO OIL PAINTING ONLINE</span><h2 id="photo-guide-heading">A few tips for your first painting</h2></div>
+        <p className="photo-guide-intro">Canvasly is an AI oil painting generator that edits an uploaded photo, so you can start with a moment you already love instead of writing a text prompt from scratch. The result is a new interpretation; details and colors can change, so preview it before downloading.</p>
+        <div className="photo-guide-tips">
+          <article><h3>Choose a clear subject</h3><p>A well-lit portrait, pet, or landscape gives the image model a clear starting point.</p></article>
+          <article><h3>Keep the photo simple</h3><p>Photos where the main subject is easy to see are a good place to begin, especially for a first try.</p></article>
+          <article><h3>Check the result</h3><p>AI paintings can vary. Review the image and make sure it looks right before saving or sharing it.</p></article>
         </div>
       </section>
 
