@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
 import AccountLink from "@/app/components/AccountLink";
+import SiteFooter from "@/app/components/SiteFooter";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -98,8 +99,8 @@ export default function Home() {
 
       <section className="hero">
         <div className="eyebrow"><span /> YOUR PHOTO, REIMAGINED</div>
-        <h1>Turn a photo into<br /><em>an oil painting</em></h1>
-        <p className="hero-copy">Bring a painterly touch to a moment you love.<br className="desktop-break" /> Upload a photo and let AI create your oil painting.</p>
+        <h1>AI Oil Painting<br /><em>Generator</em></h1>
+        <p className="hero-copy">Turn a photo into an oil painting with AI.<br className="desktop-break" /> Upload a JPG, PNG, or WebP image and download your artwork.</p>
       </section>
 
       <section className="workspace" aria-label="Oil painting generator">
@@ -174,7 +175,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="site-footer"><Link className="brand footer-brand" href="/"><span className="brand-icon" aria-hidden="true">✳</span><span>canvasly</span></Link><span>Make a little art from a moment.</span><Link href="/privacy">Privacy</Link></footer>
+      <SiteFooter />
     </main>
   );
 }
