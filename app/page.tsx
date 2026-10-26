@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
+import AccountLink from "@/app/components/AccountLink";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -64,9 +65,11 @@ export default function Home() {
       const response = await fetch("/api/generate", { method: "POST", body: form });
       const data = (await response.json()) as { image?: string; error?: string };
       if (!response.ok || !data.image) {
+        if (response.status === 401) throw new Error("Please sign in with Google to use your free painting credit.");
         throw new Error(data.error || "We could not make your painting. Please try again.");
       }
       setResult(data.image);
+      window.dispatchEvent(new Event("credits-updated"));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Something went wrong. Please try again.");
     } finally {
@@ -90,6 +93,7 @@ export default function Home() {
           <span>canvasly</span>
         </Link>
         <a className="header-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a>
+        <AccountLink />
       </header>
 
       <section className="hero">
@@ -163,9 +167,9 @@ export default function Home() {
       <section className="faq-section">
         <div className="section-heading"><span>A FEW THINGS TO KNOW</span><h2>Good to know</h2></div>
         <div className="faq-list">
-          <details><summary>Is this really free?</summary><p>Each image is created by an AI image service, which may have a usage cost. We’re keeping this practice project simple and may limit how often the tool can be used.</p></details>
+          <details><summary>Do I get a free painting?</summary><p>Yes. Sign in with Google and your new account gets one painting credit to try the generator. Each successful painting uses one credit.</p></details>
           <details><summary>What photos can I upload?</summary><p>Use a JPG, PNG, or WebP file up to 4 MB. Please only upload photos you have permission to use.</p></details>
-          <details><summary>Do I need an account?</summary><p>No account is needed for this first version.</p></details>
+          <details><summary>Do I need an account?</summary><p>Yes. Sign in with Google to use your free painting credit and see how many credits remain.</p></details>
           <details><summary>What happens to my photo?</summary><p>Your photo is sent to our image service so it can create the painting. This website does not save uploads to a gallery. See our <a href="/privacy">Privacy Notice</a> for more details.</p></details>
         </div>
       </section>

@@ -1,6 +1,8 @@
 import OpenAI, { toFile } from "openai";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 60;
 
@@ -12,6 +14,13 @@ function jsonError(message: string, status: number) {
 }
 
 export async function POST(request: Request) {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
+    return jsonError("The account service is not set up yet. Please try again later.", 503);
+  }
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return Response.json({ error: "Please sign in with Google before creating a painting.", code: "AUTH_REQUIRED" }, { status: 401 });
+
   const apiKey = process.env.OPENAI_API_KEY;
   const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
   const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -52,6 +61,30 @@ export async function POST(request: Request) {
     return jsonError("We couldn’t check the request limit. Please try again shortly.", 503);
   }
 
+  let admin: ReturnType<typeof createAdminClient>;
+  try {
+    admin = createAdminClient();
+  } catch (error) {
+    console.error("Credit service is not configured", error);
+    return jsonError("The account service is not set up yet. Please try again later.", 503);
+  }
+
+  const { data: consumed, error: consumeError } = await admin.rpc("consume_generation_credit", { p_user_id: user.id });
+  if (consumeError) {
+    console.error("Could not use generation credit", consumeError);
+    return jsonError("We couldn’t check your painting credits. Please try again shortly.", 503);
+  }
+  if (!consumed) return Response.json({ error: "You’re out of painting credits. More purchase options will be available soon.", code: "NO_CREDITS" }, { status: 402 });
+
+  async function refundCredit() {
+    try {
+      const { error } = await admin.rpc("refund_generation_credit", { p_user_id: user.id });
+      if (error) console.error("Could not refund generation credit", error);
+    } catch (error) {
+      console.error("Could not refund generation credit", error);
+    }
+  }
+
   try {
     const openai = new OpenAI({ apiKey, timeout: 55_000, maxRetries: 1 });
     const inputFile = await toFile(Buffer.from(await image.arrayBuffer()), image.name || "photo", { type: image.type });
@@ -65,9 +98,13 @@ export async function POST(request: Request) {
       output_compression: 70,
     });
     const encoded = response.data?.[0]?.b64_json;
-    if (!encoded) return jsonError("The image service returned no painting. Please try again.", 502);
+    if (!encoded) {
+      await refundCredit();
+      return jsonError("The image service returned no painting. Your credit was returned; please try again.", 502);
+    }
     return Response.json({ image: `data:image/jpeg;base64,${encoded}` }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
+    await refundCredit();
     console.error("Image generation failed", error);
     if (error instanceof OpenAI.APIError && error.status === 429) {
       return jsonError("The image service is busy or its usage limit has been reached. Please try again later.", 429);
