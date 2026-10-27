@@ -113,7 +113,10 @@ export default function Home() {
           <span className="brand-icon" aria-hidden="true">✳</span>
           <span>canvasly</span>
         </Link>
-        <a className="header-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a>
+        <nav className="header-nav" aria-label="Main navigation">
+          <a className="header-link" href="#pricing">Pricing <span aria-hidden="true">↗</span></a>
+          <a className="header-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a>
+        </nav>
         <AccountLink />
       </header>
 
