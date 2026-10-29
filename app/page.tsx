@@ -6,6 +6,7 @@ import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
 import AccountLink from "@/app/components/AccountLink";
 import SiteFooter from "@/app/components/SiteFooter";
 import CreditPacks from "@/app/components/CreditPacks";
+import BeforeAfterSlider from "@/app/components/BeforeAfterSlider";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -121,13 +122,20 @@ export default function Home() {
         <AccountLink />
       </header>
 
-      <section className="hero">
-        <div className="eyebrow"><span /> YOUR PHOTO, REIMAGINED</div>
-        <h1>AI Oil Painting<br /><em>Generator</em></h1>
-        <p className="hero-copy">Turn a photo into an oil painting with AI.<br className="desktop-break" /> Get one free credit after Google sign-in, then preview and download your artwork.</p>
-        <div className="hero-actions">
-          <a className="button button-primary" href="#workspace">Create your painting <span aria-hidden="true">↘</span></a>
-          <a className="hero-example-link" href="#examples">See example paintings</a>
+      <section className="hero hero-split">
+        <div className="hero-copy-block">
+          <div className="eyebrow"><span /> YOUR PHOTO, REIMAGINED</div>
+          <h1>AI Oil Painting<br /><em>Generator</em></h1>
+          <p className="hero-copy">Turn a photo into an oil painting with AI. Move the slider to see a sample transformation. Get one free credit after Google sign-in.</p>
+          <div className="hero-actions">
+            <a className="button button-primary" href="#workspace">Create your painting <span aria-hidden="true">↘</span></a>
+            <a className="hero-example-link" href="#examples">Explore more examples</a>
+          </div>
+        </div>
+        <div className="hero-demo">
+          <div className="hero-demo-heading"><span>SLIDE TO COMPARE</span><span>DEMO</span></div>
+          <BeforeAfterSlider />
+          <p className="hero-demo-caption">An illustrative sample. Your result may look different.</p>
         </div>
       </section>
 
@@ -187,23 +195,16 @@ export default function Home() {
       <section className="examples-section" id="examples" aria-labelledby="examples-heading">
         <div className="section-heading">
           <span>FROM EVERYDAY PHOTOS TO PAINTERLY MOMENTS</span>
-          <h2 id="examples-heading">See the transformation.</h2>
-          <p className="examples-intro">A few examples of how a photo can look with an oil-painting finish.</p>
+          <h2 id="examples-heading">More ways to make it yours.</h2>
+          <p className="examples-intro">Explore a couple more photo-to-painting examples.</p>
         </div>
-        <div className="example-grid">
+        <div className="example-grid example-grid--two">
           <figure className="example-card">
             <div className="example-image">
               <Image src="/demo-dog.jpg" alt="Golden retriever photo transformed into a warm oil painting" fill sizes="(max-width: 700px) 90vw, 33vw" />
               <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
             </div>
             <figcaption><strong>A sunny garden companion</strong><span>Pets</span></figcaption>
-          </figure>
-          <figure className="example-card">
-            <div className="example-image">
-              <Image src="/demo-portrait.jpg" alt="Portrait in a wildflower meadow shown as a photo and an oil painting" fill sizes="(max-width: 700px) 90vw, 33vw" />
-              <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
-            </div>
-            <figcaption><strong>A moment in the meadow</strong><span>Portraits</span></figcaption>
           </figure>
           <figure className="example-card">
             <div className="example-image">

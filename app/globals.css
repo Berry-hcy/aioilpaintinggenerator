@@ -97,3 +97,27 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 .examples-cta:hover{text-decoration:underline;text-underline-offset:4px}
 @media(max-width:760px){.examples-section{padding:64px 0 60px}.example-grid{grid-template-columns:1fr;max-width:520px;margin:27px auto 0;gap:14px}.example-image{aspect-ratio:3/2}.example-card{padding:10px}.examples-intro{font-size:14px}}
 @media(max-width:460px){.hero-actions{flex-direction:column;gap:13px;margin-top:22px}.hero-actions .button{width:100%}.examples-section{padding:56px 0}.example-card figcaption strong{font-size:13px}.header-nav .header-link:last-child{display:none}}
+
+/* Keep the before/after demonstration in the first screenful. */
+.hero-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(32px,5vw,64px);padding:42px 12px 52px;text-align:left}
+.hero-copy-block{max-width:450px}
+.hero-split h1{font-size:clamp(46px,5.5vw,68px)}
+.hero-copy-block .hero-copy{max-width:430px}
+.hero-split .hero-actions{justify-content:flex-start;flex-wrap:wrap;gap:16px}
+.hero-demo{width:min(100%,400px);justify-self:end}
+.hero-demo-heading{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px;color:#62645e;font-size:10px;font-weight:700;letter-spacing:.14em}
+.hero-demo-heading span:last-child{padding:4px 8px;border:1px solid var(--line);border-radius:999px;background:#fff9;color:var(--green);font-size:9px}
+.before-after-slider{position:relative;isolation:isolate;width:100%;aspect-ratio:3/4;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--paper-dark);box-shadow:0 18px 45px rgba(49,52,38,.12)}
+.comparison-image{position:absolute;top:0;height:100%;width:200%;max-width:none;object-fit:fill}
+.comparison-after{left:-100%}
+.comparison-before{position:absolute;inset:0;z-index:1;overflow:hidden}
+.comparison-original{left:0}
+.comparison-labels{position:absolute;z-index:2;top:11px;left:10px;right:10px;display:flex;justify-content:space-between;pointer-events:none}
+.comparison-labels span{padding:7px 10px;border:1px solid #ffffff88;border-radius:999px;background:#222a;color:#fff;font-size:11px;font-weight:600;backdrop-filter:blur(8px)}
+.comparison-divider{position:absolute;z-index:3;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 12px #0005;pointer-events:none;transform:translateX(-50%)}
+.comparison-divider span{position:absolute;top:50%;left:50%;display:grid;place-items:center;width:43px;height:43px;border:2px solid #fff;border-radius:50%;background:var(--green);box-shadow:0 3px 12px #0003;color:white;font-size:21px;transform:translate(-50%,-50%)}
+.comparison-control{position:absolute;z-index:4;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;touch-action:pan-y}
+.before-after-slider:focus-within .comparison-divider span{outline:3px solid #e0b67f;outline-offset:4px}
+.hero-demo-caption{margin:10px 0 0;text-align:right;color:var(--muted);font-size:11px;line-height:1.5}
+.example-grid--two{grid-template-columns:repeat(2,minmax(0,1fr));max-width:850px;margin-left:auto;margin-right:auto}
+@media(max-width:700px){.hero-split{grid-template-columns:1fr;gap:25px;padding:22px 0 40px}.hero-demo{order:-1;width:min(100%,360px);justify-self:center}.hero-copy-block{max-width:none;text-align:center}.hero-split h1{font-size:clamp(46px,10vw,62px);margin-top:14px}.hero-copy-block .hero-copy{margin-left:auto;margin-right:auto}.hero-split .hero-actions{justify-content:center}.hero-demo-caption{text-align:center}.example-grid--two{grid-template-columns:1fr;max-width:520px}}
