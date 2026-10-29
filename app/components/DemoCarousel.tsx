@@ -57,7 +57,7 @@ export default function DemoCarousel() {
           </button>
         )}
       </div>
-      <div className={`demo-marquee${isPaused ? " is-paused" : ""}`} aria-label="Ten photo-to-oil-painting examples">
+      <div className={`demo-marquee${isPaused ? " is-paused" : ""}`} role="region" aria-label="Ten photo-to-oil-painting examples">
         <div className="demo-track">
           <DemoSet />
           <DemoSet duplicate />

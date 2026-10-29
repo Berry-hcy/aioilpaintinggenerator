@@ -126,7 +126,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 .demo-pause-button{min-height:38px;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;background:#fff8;color:var(--green);font:inherit;font-size:12px;font-weight:600;cursor:pointer}
 .demo-pause-button span{font-size:12px}
 .demo-pause-button:hover{background:#fff}
-.demo-marquee{width:calc(100% + max(24px, (100vw - 1120px)/2));margin-left:calc(-1 * max(12px, (100vw - 1120px)/2));overflow:hidden;touch-action:pan-y}
+.demo-marquee{width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;touch-action:pan-y;mask-image:linear-gradient(to right,transparent,#000 3%,#000 97%,transparent)}
 .demo-track{display:flex;width:max-content;animation:demo-roll 58s linear infinite;will-change:transform}
 .demo-set{display:flex;align-items:stretch;gap:18px;padding-right:18px}
 .demo-card{flex:0 0 clamp(280px,34vw,390px);min-width:0;margin:0;padding:10px;border:1px solid #deddd4;border-radius:15px;background:rgba(255,255,255,.78);box-shadow:0 12px 30px rgba(49,52,38,.045)}
@@ -138,5 +138,5 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 .demo-marquee:hover .demo-track,.demo-marquee:focus-within .demo-track,.demo-marquee.is-paused .demo-track{animation-play-state:paused}
 .examples-disclaimer{margin:18px 0 0;text-align:center;color:var(--muted);font-size:12px;line-height:1.6}
 @keyframes demo-roll{to{transform:translate3d(-50%,0,0)}}
-@media(max-width:700px){.demo-carousel-controls{padding:0 2px}.demo-card{flex-basis:min(78vw,350px)}.demo-card-image{aspect-ratio:3/2}.demo-track{animation-duration:48s}.demo-marquee{width:calc(100% + 13px);margin-left:-13px}}
+@media(max-width:700px){.demo-carousel-controls{padding:0 2px}.demo-card{flex-basis:min(78vw,350px)}.demo-card-image{aspect-ratio:3/2}.demo-track{animation-duration:48s}}
 @media(prefers-reduced-motion:reduce){.demo-track{animation:none!important;transform:none!important}.demo-marquee{overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin}.demo-set[aria-hidden="true"]{display:none}}
