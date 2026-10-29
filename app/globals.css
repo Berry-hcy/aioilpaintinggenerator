@@ -140,3 +140,4 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 @keyframes demo-roll{to{transform:translate3d(-50%,0,0)}}
 @media(max-width:700px){.demo-carousel-controls{padding:0 2px}.demo-card{flex-basis:min(78vw,350px)}.demo-card-image{aspect-ratio:3/2}.demo-track{animation-duration:48s}}
 @media(prefers-reduced-motion:reduce){.demo-track{animation:none!important;transform:none!important}.demo-marquee{overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin}.demo-set[aria-hidden="true"]{display:none}}
+.generator-attribution{text-align:center;font-size:10px;line-height:1.7;color:#777970;margin:6px 0 0}.generator-attribution strong{font-weight:600;color:#55584f}.generator-attribution a{color:var(--green);text-underline-offset:2px}

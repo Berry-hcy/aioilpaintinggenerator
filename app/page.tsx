@@ -187,6 +187,10 @@ export default function Home() {
           )}
         </div>
         <p className="privacy-note">By creating a painting, your photo is sent to our image service for processing. We don’t save it to a gallery. <Link href="/privacy">Learn about privacy</Link>.</p>
+        <p className="generator-attribution">
+          Image model: <strong>GPT Image 2.5 Sunburst</strong> via Yir · Questions?{" "}
+          <a href="mailto:captianhcy@gmail.com">captianhcy@gmail.com</a>
+        </p>
       </section>
 
       <section className="examples-section" id="examples" aria-labelledby="examples-heading">

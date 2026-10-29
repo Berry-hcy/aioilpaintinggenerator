@@ -13,7 +13,7 @@ export default function SiteFooter() {
         <Link href="/terms">Terms</Link>
         <Link href="/privacy">Privacy</Link>
         <a href={`mailto:${CONTACT_EMAIL}?subject=Canvasly%20content%20report`}>Report</a>
-        <a href={`mailto:${CONTACT_EMAIL}`}>Contact</a>
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
       </nav>
     </footer>
   );
