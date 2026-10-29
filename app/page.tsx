@@ -114,6 +114,7 @@ export default function Home() {
           <span>canvasly</span>
         </Link>
         <nav className="header-nav" aria-label="Main navigation">
+          <a className="header-link" href="#examples">Examples <span aria-hidden="true">↗</span></a>
           <a className="header-link" href="#pricing">Pricing <span aria-hidden="true">↗</span></a>
           <a className="header-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a>
         </nav>
@@ -124,9 +125,13 @@ export default function Home() {
         <div className="eyebrow"><span /> YOUR PHOTO, REIMAGINED</div>
         <h1>AI Oil Painting<br /><em>Generator</em></h1>
         <p className="hero-copy">Turn a photo into an oil painting with AI.<br className="desktop-break" /> Get one free credit after Google sign-in, then preview and download your artwork.</p>
+        <div className="hero-actions">
+          <a className="button button-primary" href="#workspace">Create your painting <span aria-hidden="true">↘</span></a>
+          <a className="hero-example-link" href="#examples">See example paintings</a>
+        </div>
       </section>
 
-      <section className="workspace" aria-label="Oil painting generator">
+      <section className="workspace" id="workspace" aria-label="Oil painting generator">
         <div className="work-topline"><span>YOUR CANVAS</span><span className="secure"><span aria-hidden="true">✦</span> Private by design</span></div>
         <div className="canvas-grid">
           <div className="canvas-column">
@@ -177,6 +182,39 @@ export default function Home() {
           )}
         </div>
         <p className="privacy-note">By creating a painting, your photo is sent to our image service for processing. We don’t save it to a gallery. <Link href="/privacy">Learn about privacy</Link>.</p>
+      </section>
+
+      <section className="examples-section" id="examples" aria-labelledby="examples-heading">
+        <div className="section-heading">
+          <span>FROM EVERYDAY PHOTOS TO PAINTERLY MOMENTS</span>
+          <h2 id="examples-heading">See the transformation.</h2>
+          <p className="examples-intro">A few examples of how a photo can look with an oil-painting finish.</p>
+        </div>
+        <div className="example-grid">
+          <figure className="example-card">
+            <div className="example-image">
+              <Image src="/demo-dog.jpg" alt="Golden retriever photo transformed into a warm oil painting" fill sizes="(max-width: 700px) 90vw, 33vw" />
+              <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
+            </div>
+            <figcaption><strong>A sunny garden companion</strong><span>Pets</span></figcaption>
+          </figure>
+          <figure className="example-card">
+            <div className="example-image">
+              <Image src="/demo-portrait.jpg" alt="Portrait in a wildflower meadow shown as a photo and an oil painting" fill sizes="(max-width: 700px) 90vw, 33vw" />
+              <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
+            </div>
+            <figcaption><strong>A moment in the meadow</strong><span>Portraits</span></figcaption>
+          </figure>
+          <figure className="example-card">
+            <div className="example-image">
+              <Image src="/demo-landscape.jpg" alt="Mountain lake landscape shown as a photo and an oil painting" fill sizes="(max-width: 700px) 90vw, 33vw" />
+              <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
+            </div>
+            <figcaption><strong>Golden hour by the lake</strong><span>Landscapes</span></figcaption>
+          </figure>
+        </div>
+        <p className="examples-disclaimer">Illustrative examples made for this website. Your result may look different.</p>
+        <a className="examples-cta" href="#workspace">Try it with your own photo <span aria-hidden="true">↗</span></a>
       </section>
 
       <section className="pricing-section" id="pricing" aria-labelledby="pricing-heading">

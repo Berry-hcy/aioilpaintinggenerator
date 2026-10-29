@@ -19,11 +19,13 @@ export const metadata: Metadata = {
     siteName: "Canvasly",
     url: "/",
     locale: "en_US",
+    images: [{ url: "/demo-landscape.jpg", width: 1400, height: 933, alt: "Photo to oil painting example from Canvasly" }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "AI Oil Painting Generator | Canvasly",
     description: "Turn a photo into an oil painting with AI. Get one free credit after Google sign-in.",
+    images: ["/demo-landscape.jpg"],
   },
 };
 
