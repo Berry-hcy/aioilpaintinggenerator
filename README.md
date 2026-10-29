@@ -9,7 +9,7 @@ npm install
 cp .env.example .env.local
 ```
 
-Fill in the Cloudflare, Upstash, and Supabase values in `.env.local`. Keep that file private; it is ignored by Git.
+Fill in the Yir, Upstash, and Supabase values in `.env.local`. Keep that file private; it is ignored by Git.
 
 ```bash
 npm run dev
@@ -28,14 +28,13 @@ Open <http://localhost:3000>. Use a JPG, PNG, or WebP image up to 4 MB. Sign in 
 7. In Vercel **Project → Settings → Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for Production (and Preview if desired). Set `SITE_URL` to `https://aioilpaintinggenerator.store`, then redeploy.
 8. In Supabase SQL Editor, run `supabase/migrations/202610260002_waffo_credit_packs.sql` after the first migration. This adds expiring paid-credit lots and the order ledger.
 
-## Set up image generation with Cloudflare Workers AI
+## Set up image generation with Yir
 
-1. In the Cloudflare dashboard, open **Workers AI** and find the account ID shown for your account.
-2. Open **Manage Account → API Tokens** and create a token with the **Workers AI** permissions needed to run models. Keep it private; never put it in browser code or send it in chat.
-3. Add `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` to `.env.local` for local development and to Vercel **Project → Settings → Environment Variables** for Production.
-4. Redeploy the Vercel project after adding or changing the values.
+1. Sign in to [Yir Console](https://yir.ai/zh/console), open **API Keys**, and create an API key. The account may need a balance before it can generate images.
+2. Add `YIR_API_KEY` to `.env.local` for local development and to Vercel **Project → Settings → Environment Variables** for Production. Keep it private; never put it in browser code or send it in chat.
+3. Redeploy the Vercel project after adding or changing the value.
 
-The site uses Cloudflare model `@cf/black-forest-labs/flux-2-klein-4b` to turn the uploaded photo into an oil-painting style image. The model's free usage is limited by Cloudflare's daily quota; it is not unlimited, and generation can stop when the quota is exhausted. Check Cloudflare's current Workers AI pricing and limits before launch. The input photo is resized in your browser to meet the model's reference-image size limit before it is sent for processing.
+The site uses Yir model `openai/gpt-image-2.5-sunburst` to edit the uploaded photo into an oil painting. Free credits request 1K output; paid HD credits request 2K output. Yir processes images as asynchronous jobs; the website checks the job, then streams the original image to the preview/download controls without saving it to a Canvasly gallery. Check current model prices and your Yir wallet before launch. Yir says generated results remain available for seven days; review its current privacy and retention terms.
 
 ## Set up Waffo one-time credit packs
 
@@ -56,8 +55,7 @@ Paid credits are added only after a verified payment event. Each paid credit cre
 
 Add these environment variables in Vercel:
 
-- `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_API_TOKEN`
+- `YIR_API_KEY`
 - `UPSTASH_REDIS_REST_URL`
 - `UPSTASH_REDIS_REST_TOKEN`
 - `SITE_URL=https://aioilpaintinggenerator.store`
@@ -66,7 +64,7 @@ Add these environment variables in Vercel:
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `WAFFO_PRIVATE_KEY`
 
-The Cloudflare API token, Upstash values, and Supabase service-role value are secrets. Never commit them to GitHub or expose them in browser code. The `NEXT_PUBLIC_` Supabase values are designed to be public; access is controlled by the database's row rules.
+The Yir API key, Upstash values, and Supabase service-role value are secrets. Never commit them to GitHub or expose them in browser code. The `NEXT_PUBLIC_` Supabase values are designed to be public; access is controlled by the database's row rules.
 
 ## Routes
 

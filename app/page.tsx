@@ -12,25 +12,6 @@ import DemoCarousel from "@/app/components/DemoCarousel";
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-async function prepareReferencePhoto(file: File): Promise<File> {
-  const bitmap = await createImageBitmap(file);
-  try {
-    const scale = Math.min(1, 511 / Math.max(bitmap.width, bitmap.height));
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
-    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
-    const context = canvas.getContext("2d");
-    if (!context) throw new Error("Your browser could not prepare this photo. Please try another image.");
-    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    const blob = await new Promise<Blob>((resolve, reject) => {
-      canvas.toBlob((value) => value ? resolve(value) : reject(new Error("Your browser could not prepare this photo. Please try again.")), "image/jpeg", 0.9);
-    });
-    return new File([blob], "photo.jpg", { type: "image/jpeg" });
-  } finally {
-    bitmap.close();
-  }
-}
-
 export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -84,14 +65,29 @@ export default function Home() {
     setResult("");
     try {
       const form = new FormData();
-      form.append("image", await prepareReferencePhoto(file));
+      form.append("image", file);
       const response = await fetch("/api/generate", { method: "POST", body: form });
-      const data = (await response.json()) as { image?: string; error?: string };
-      if (!response.ok || !data.image) {
+      const data = (await response.json()) as { jobId?: string; error?: string };
+      if (!response.ok || !data.jobId) {
         if (response.status === 401) throw new Error("Please sign in with Google to use your free painting credit.");
         throw new Error(data.error || "We could not make your painting. Please try again.");
       }
-      setResult(data.image);
+      const startedAt = Date.now();
+      let completed = false;
+      while (Date.now() - startedAt < 4 * 60 * 1000) {
+        await new Promise((resolve) => window.setTimeout(resolve, 3000));
+        const statusResponse = await fetch(`/api/generate/status?jobId=${encodeURIComponent(data.jobId)}`, { cache: "no-store" });
+        const status = (await statusResponse.json()) as { status?: string; resultUrl?: string; error?: string };
+        if (!statusResponse.ok && statusResponse.status >= 500) continue;
+        if (!statusResponse.ok) throw new Error(status.error || "We could not check your painting. Please try again.");
+        if (status.status === "failed") throw new Error(status.error || "We could not make your painting. Your credit was returned.");
+        if (status.status === "succeeded" && status.resultUrl) {
+          setResult(status.resultUrl);
+          completed = true;
+          break;
+        }
+      }
+      if (!completed) throw new Error("Your painting is taking longer than usual. Please refresh your account and contact us if the credit was used but no image appeared.");
       window.dispatchEvent(new Event("credits-updated"));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Something went wrong. Please try again.");
@@ -181,7 +177,7 @@ export default function Home() {
         <div className="action-row">
           {result ? (
             <>
-              <a className="button button-primary" href={result} download="my-oil-painting.png">Download painting <span aria-hidden="true">↓</span></a>
+              <a className="button button-primary" href={`${result}&download=1`} download="my-oil-painting">Download painting <span aria-hidden="true">↓</span></a>
               <button className="button button-secondary" type="button" onClick={reset}>Try another photo</button>
             </>
           ) : (
