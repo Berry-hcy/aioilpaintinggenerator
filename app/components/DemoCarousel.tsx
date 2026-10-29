@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const examples = [
   { src: "/demo-dog.jpg", alt: "Golden retriever photo and oil-painting version", title: "A sunny garden companion", category: "Pets" },
@@ -16,51 +16,86 @@ const examples = [
   { src: "/demo-cafe.jpg", alt: "Old European café street photo and oil-painting version", title: "The café at golden hour", category: "Travel" },
 ];
 
-function DemoSet({ duplicate = false }: { duplicate?: boolean }) {
-  return (
-    <div className="demo-set" aria-hidden={duplicate || undefined}>
-      {examples.map((example) => (
-        <figure className="demo-card" key={`${duplicate ? "copy-" : ""}${example.src}`}>
-          <div className="demo-card-image">
-            <Image src={example.src} alt={example.alt} fill sizes="(max-width: 700px) 78vw, 380px" />
-            <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
-          </div>
-          <figcaption><strong>{example.title}</strong><span>{example.category}</span></figcaption>
-        </figure>
-      ))}
-    </div>
-  );
-}
-
 export default function DemoCarousel() {
-  const [paused, setPaused] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduceMotion(preference.matches);
-    update();
-    preference.addEventListener("change", update);
-    return () => preference.removeEventListener("change", update);
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+
+    const cards = gallery.querySelectorAll<HTMLElement>("[data-scroll-reveal]");
+    gallery.classList.add("has-scroll-reveal");
+    if (!("IntersectionObserver" in window)) {
+      cards.forEach((card) => card.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
   }, []);
 
-  const isPaused = paused || reduceMotion;
+  useEffect(() => {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+    const scrollElement = gallery;
+
+    function mapWheelToHorizontal(event: WheelEvent) {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      const maxScroll = scrollElement.scrollWidth - scrollElement.clientWidth;
+      const canMoveLeft = event.deltaY < 0 && scrollElement.scrollLeft > 0;
+      const canMoveRight = event.deltaY > 0 && scrollElement.scrollLeft < maxScroll - 1;
+      if (canMoveLeft || canMoveRight) {
+        event.preventDefault();
+        scrollElement.scrollLeft += event.deltaY;
+      }
+    }
+
+    scrollElement.addEventListener("wheel", mapWheelToHorizontal, { passive: false });
+    return () => scrollElement.removeEventListener("wheel", mapWheelToHorizontal);
+  }, []);
+
+  function moveGallery(direction: -1 | 1) {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+    const card = gallery.querySelector<HTMLElement>(".demo-card");
+    const step = (card?.getBoundingClientRect().width ?? gallery.clientWidth * 0.82) + 18;
+    gallery.scrollBy({ left: step * direction, behavior: "smooth" });
+  }
 
   return (
     <>
       <div className="demo-carousel-controls">
-        <p>{reduceMotion ? "Swipe or scroll to browse" : "Auto-scrolling examples · hover to pause"}</p>
-        {!reduceMotion && (
-          <button type="button" className="demo-pause-button" onClick={() => setPaused((value) => !value)} aria-pressed={paused}>
-            <span aria-hidden="true">{paused ? "▶" : "Ⅱ"}</span>
-            {paused ? "Play examples" : "Pause scroll"}
-          </button>
-        )}
+        <p>Scroll to explore · swipe on mobile · stop anywhere to pause</p>
+        <div className="demo-carousel-arrows" role="group" aria-label="Example controls">
+          <button type="button" onClick={() => moveGallery(-1)} aria-label="Previous examples">←</button>
+          <button type="button" onClick={() => moveGallery(1)} aria-label="Next examples">→</button>
+        </div>
       </div>
-      <div className={`demo-marquee${isPaused ? " is-paused" : ""}`} role="region" aria-label="Ten photo-to-oil-painting examples">
+      <div
+        className="demo-marquee"
+        role="region"
+        aria-label="Ten photo-to-oil-painting examples"
+        tabIndex={0}
+        ref={galleryRef}
+      >
         <div className="demo-track">
-          <DemoSet />
-          <DemoSet duplicate />
+          {examples.map((example) => (
+            <figure className="demo-card" key={example.src} data-scroll-reveal>
+              <div className="demo-card-image">
+                <Image src={example.src} alt={example.alt} fill sizes="(max-width: 700px) 78vw, 380px" />
+                <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
+              </div>
+              <figcaption><strong>{example.title}</strong><span>{example.category}</span></figcaption>
+            </figure>
+          ))}
         </div>
       </div>
     </>
