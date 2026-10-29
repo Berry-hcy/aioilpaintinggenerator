@@ -7,6 +7,7 @@ import AccountLink from "@/app/components/AccountLink";
 import SiteFooter from "@/app/components/SiteFooter";
 import CreditPacks from "@/app/components/CreditPacks";
 import BeforeAfterSlider from "@/app/components/BeforeAfterSlider";
+import DemoCarousel from "@/app/components/DemoCarousel";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -195,26 +196,11 @@ export default function Home() {
       <section className="examples-section" id="examples" aria-labelledby="examples-heading">
         <div className="section-heading">
           <span>FROM EVERYDAY PHOTOS TO PAINTERLY MOMENTS</span>
-          <h2 id="examples-heading">More ways to make it yours.</h2>
-          <p className="examples-intro">Explore a couple more photo-to-painting examples.</p>
+          <h2 id="examples-heading">Ten scenes, one painterly twist.</h2>
+          <p className="examples-intro">Pets, portraits, flowers and places—scroll through the photo-to-painting examples.</p>
         </div>
-        <div className="example-grid example-grid--two">
-          <figure className="example-card">
-            <div className="example-image">
-              <Image src="/demo-dog.jpg" alt="Golden retriever photo transformed into a warm oil painting" fill sizes="(max-width: 700px) 90vw, 33vw" />
-              <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
-            </div>
-            <figcaption><strong>A sunny garden companion</strong><span>Pets</span></figcaption>
-          </figure>
-          <figure className="example-card">
-            <div className="example-image">
-              <Image src="/demo-landscape.jpg" alt="Mountain lake landscape shown as a photo and an oil painting" fill sizes="(max-width: 700px) 90vw, 33vw" />
-              <div className="example-labels"><span>Photo</span><span>Oil painting</span></div>
-            </div>
-            <figcaption><strong>Golden hour by the lake</strong><span>Landscapes</span></figcaption>
-          </figure>
-        </div>
-        <p className="examples-disclaimer">Illustrative examples made for this website. Your result may look different.</p>
+        <DemoCarousel />
+        <p className="examples-disclaimer">These are illustrative AI-created examples, not customer photos. Your result may look different.</p>
         <a className="examples-cta" href="#workspace">Try it with your own photo <span aria-hidden="true">↗</span></a>
       </section>
 
