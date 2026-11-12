@@ -1,9 +1,11 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { WaffoPancakeError } from "@waffo/pancake-ts";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { generationJobKey, type GenerationJobContext } from "@/lib/generation-jobs";
-import { submitYirPainting, uploadYirReference } from "@/lib/yir";
+import { submitYirPainting, uploadYirReference, YIR_PAINTING_PROMPT } from "@/lib/yir";
+import { scanGenerationPrompt } from "@/lib/waffo/content-safety";
 
 export const maxDuration = 60;
 
@@ -28,6 +30,7 @@ export async function POST(request: Request) {
   const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
   const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!yirApiKey) return jsonError("Image generation is not set up yet. Please try again later.", 503);
+  if (!process.env.WAFFO_PRIVATE_KEY) return jsonError("The content safety check is not set up yet. Please try again later.", 503);
   if (!redisUrl || !redisToken) return jsonError("The request limit service is not set up yet. Please try again later.", 503);
 
   let form: FormData;
@@ -62,6 +65,35 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Request limit check failed", error);
     return jsonError("We couldn’t check the request limit. Please try again shortly.", 503);
+  }
+
+  try {
+    const verdict = await scanGenerationPrompt(YIR_PAINTING_PROMPT);
+    console.info("Waffo prompt safety scan completed", {
+      requestId: verdict.requestId,
+      action: verdict.action,
+      reasonCode: verdict.reasonCode,
+    });
+    if (verdict.action === "block") {
+      return Response.json(
+        { error: "This request can’t be generated because it does not meet our content guidelines.", code: "PROMPT_BLOCKED" },
+        { status: 422 },
+      );
+    }
+    if (verdict.action !== "allow") {
+      const retryAfter = verdict.reasonCode === "service_degraded" ? "60" : "3600";
+      return Response.json(
+        { error: "The content safety check needs more time. Please try again later.", code: "PROMPT_REVIEW" },
+        { status: 503, headers: { "Retry-After": retryAfter } },
+      );
+    }
+  } catch (error) {
+    const status = error instanceof WaffoPancakeError ? error.status : undefined;
+    console.error("Waffo prompt safety scan failed", { status });
+    return Response.json(
+      { error: "The content safety check is temporarily unavailable. Your credit was not used; please try again later.", code: "SAFETY_SCAN_UNAVAILABLE" },
+      { status: 503, headers: { "Retry-After": status === 429 ? "60" : "30" } },
+    );
   }
 
   let admin: ReturnType<typeof createAdminClient>;

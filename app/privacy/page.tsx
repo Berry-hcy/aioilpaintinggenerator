@@ -15,7 +15,7 @@ export default function PrivacyPage() {
     <main className="privacy-page">
       <Link className="brand" href="/"><span className="brand-icon" aria-hidden="true">✳</span><span>canvasly</span></Link>
       <article>
-        <p className="eyebrow">LAST UPDATED: OCTOBER 26, 2026</p>
+        <p className="eyebrow">LAST UPDATED: NOVEMBER 12, 2026</p>
         <h1>Privacy Policy</h1>
         <p>This policy explains what Canvasly (“we”) handles when you use our AI oil painting generator. Canvasly is operated by an individual based in China. Questions or privacy requests: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
 
@@ -26,10 +26,10 @@ export default function PrivacyPage() {
         <p><strong>Technical and security data.</strong> Our hosting, authentication, and request-limit services may process technical information such as browser requests, cookies used for sign-in, and network information. We use Upstash to enforce a limit of three generation attempts per IP address per ten minutes. We do not use this information to build an advertising profile.</p>
 
         <h2>Why we use it</h2>
-        <p>We use account details to sign you in, provide and manage painting credits, prevent abuse, operate the website, and respond to support requests. We use your chosen photo only to perform the generation you request and to return the result.</p>
+        <p>We use account details to sign you in, provide and manage painting credits, prevent abuse, operate the website, and respond to support requests. We use your chosen photo only to perform the generation you request and to return the result. The text instructions used to create the painting are checked for content safety before generation.</p>
 
         <h2>Service providers</h2>
-        <p>Canvasly relies on Supabase for sign-in and account data, Waffo for checkout and payment processing, Yir for image generation, Vercel for hosting, and Upstash for request limits. These providers process information to provide their services under their own terms and privacy practices. Your photo is sent to Yir for processing. Yir’s own terms and privacy practices govern its processing and retention; please review them for current details.</p>
+        <p>Canvasly relies on Supabase for sign-in and account data, Waffo for checkout, payment processing, and prompt safety screening, Yir for image generation, Vercel for hosting, and Upstash for request limits. Before generation, the text instructions are sent to Waffo’s prompt-safety API; the uploaded photo is not sent to Waffo through this check. Waffo describes this scan as stateless and says it does not retain prompt text. Your photo is sent to Yir for processing. Yir’s own terms and privacy practices govern its processing and retention; please review them for current details.</p>
 
         <h2>Storage and deletion</h2>
         <p>We do not store uploaded photos or generated paintings in Canvasly accounts. Account information, credit balances, and purchase references remain in Supabase while your account is active or as needed to handle order and legal records. To ask us to delete your Canvasly account data, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from the email address connected to the account. We may retain limited records where needed to address security, legal, or service issues. Provider-side processing and retention follow each provider’s own policies.</p>

@@ -15,7 +15,7 @@ export default function TermsPage() {
     <main className="privacy-page">
       <Link className="brand" href="/"><span className="brand-icon" aria-hidden="true">✳</span><span>canvasly</span></Link>
       <article>
-        <p className="eyebrow">LAST UPDATED: OCTOBER 26, 2026</p>
+        <p className="eyebrow">LAST UPDATED: NOVEMBER 12, 2026</p>
         <h1>Terms of Service</h1>
         <p>These terms apply when you use Canvasly, an AI oil painting generator operated by an individual based in China (“we,” “us,” or “Canvasly”). By using the website, you agree to these terms. If you do not agree, please do not use the service.</p>
 
@@ -42,7 +42,7 @@ export default function TermsPage() {
         <p>You must also have permission to use a person’s photo or likeness. Do not try to bypass safety checks or disguise a prohibited request.</p>
 
         <h2>Safety checks, reports, and enforcement</h2>
-        <p>Generation requests are subject to automated safety checks provided by our image-generation service. The service may reject a request or result. Automated checks are not perfect, and Canvasly does not manually pre-approve every image. Canvasly does not host a public gallery or keep generated images for ongoing review.</p>
+        <p>Before each generation, Waffo screens the text instructions used to create the painting. We continue only when Waffo allows the request; a blocked request is not generated, and a request needing review must wait. Your uploaded photo is sent to Yir for generation. Automated checks are not perfect, and Canvasly does not manually pre-approve every image. Canvasly does not host a public gallery or keep generated images for ongoing review.</p>
         <p>If you believe a request or result violates these terms, report it to <a href={`mailto:${CONTACT_EMAIL}?subject=Canvasly%20content%20report`}>{CONTACT_EMAIL}</a> with the account email (if applicable), approximate date and time, and a description of the concern. Please do not email illegal material or sensitive images. The site operator reviews reports and may limit or suspend accounts, block further generations, and take other steps required by law.</p>
 
         <h2>Generated paintings</h2>

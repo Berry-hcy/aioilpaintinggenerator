@@ -1,5 +1,6 @@
 const YIR_API_BASE = "https://gateway.yir.ai/v1";
 export const YIR_MODEL = "openai/gpt-image-2.5-sunburst";
+export const YIR_PAINTING_PROMPT = "Transform this uploaded photo into a beautiful traditional oil painting. Preserve the main subject, recognizable features, pose, and composition. Use visible layered brushstrokes, rich but natural pigments, subtle canvas texture, and painterly light. Make it feel like a carefully hand-painted fine-art oil portrait. Do not add text, borders, or new subjects.";
 
 function apiKey() {
   const key = process.env.YIR_API_KEY;
@@ -76,7 +77,7 @@ export async function submitYirPainting(fileId: string, hd: boolean) {
       model: YIR_MODEL,
       input: {
         type: "image",
-        prompt: "Transform this uploaded photo into a beautiful traditional oil painting. Preserve the main subject, recognizable features, pose, and composition. Use visible layered brushstrokes, rich but natural pigments, subtle canvas texture, and painterly light. Make it feel like a carefully hand-painted fine-art oil portrait. Do not add text, borders, or new subjects.",
+        prompt: YIR_PAINTING_PROMPT,
         references: [{ role: "reference_image", file_id: fileId }],
       },
       parameters: {
